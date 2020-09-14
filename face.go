@@ -11,13 +11,20 @@ import "C"
 import (
 	// "gocv.io/x/gocv"
 	// "log"
-	// "strings"
+	"unsafe"
 )
 
 
-func extract(filePath string) {
+func extract(filePath string) []byte{
 	APPID := "64p4MfjsFyVXQM21jbTmHQbCeDcv4wwgVVaQMZaAhmGD"
 	SDKKEY := "8tGcaiv4BzcG232WmGKWTa1izjsXWSLTg8CKJsGvESX4"
 
-	C.initEngine(C.CString(APPID), C.CString(SDKKEY))
+	handle := C.initEngine(C.CString(APPID), C.CString(SDKKEY))
+	feature := C.extract(C.CString(filePath), handle)
+	
+	if feature.featureSize > 0 {
+		return C.GoBytes(unsafe.Pointer(feature.feature), feature.featureSize)
+	}else{
+		return nil
+	}
 }
