@@ -13,10 +13,6 @@ import (
 
 func main() {
 
-	filePath := "face-test.jpg"
-	featureBytes := extract(filePath)
-	log.Println("featureBytes", featureBytes)
-
 	consumer, err := beanstalk.NewConsumer([]string{"localhost:11300"}, []string{"face-recognize"}, beanstalk.Config{
 		// Multiply the list of URIs to create a larger pool of connections.
 		Multiply: 3,

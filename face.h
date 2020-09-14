@@ -7,8 +7,8 @@
 extern "C" {
 #endif
 
-MHandle initEngine(const char*, const char*);
-ASF_FaceFeature extract(const char *, MHandle);
+void* initEngine(const char*, const char*);
+ASF_FaceFeature extract(const char *, void*);
 
 #ifdef __cplusplus    
 }

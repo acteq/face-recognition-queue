@@ -12,7 +12,7 @@
 
 using namespace std;
 
-MHandle initEngine (const char* APPID, const char* SDKKEY) {
+void * initEngine (const char* APPID, const char* SDKKEY) {
     MHandle handle = NULL;
 
     MRESULT res = MOK;
@@ -20,18 +20,16 @@ MHandle initEngine (const char* APPID, const char* SDKKEY) {
 	res = ASFGetActiveFileInfo(&activeFileInfo);
 	if (res != MOK){
 		printf("ASFGetActiveFileInfo fail: %d\n", int(res));
-        // return NULL;
+        res = ASFOnlineActivation(MPChar(APPID), MPChar(SDKKEY));
+        if (MOK != res && MERR_ASF_ALREADY_ACTIVATED != res){
+            printf("ASFOnlineActivation fail: %d\n", int(res));
+            return NULL;
+        }
 	}
 
 	//SDK版本信息
 	// const ASF_VERSION version = ASFGetVersion();
 	
-	res = ASFOnlineActivation(MPChar(APPID), MPChar(SDKKEY));
-	if (MOK != res && MERR_ASF_ALREADY_ACTIVATED != res){
-		printf("ASFOnlineActivation fail: %d\n", int(res));
-        return NULL;
-    }
-
 	//初始化引擎
 	MInt32 mask = ASF_FACE_DETECT | ASF_FACERECOGNITION ;
 	res = ASFInitEngine(ASF_DETECT_MODE_IMAGE, ASF_OP_0_ONLY, 32, 4, mask, &handle);
@@ -44,7 +42,7 @@ MHandle initEngine (const char* APPID, const char* SDKKEY) {
 }
 
 
-ASF_FaceFeature extract(const char * filePath, MHandle handle) {
+ASF_FaceFeature extract(const char * filePath, void* handle) {
     cv::Mat originalImg = cv::imread(filePath, cv::IMREAD_COLOR);
     // cv::Mat originalImg = cv::imread(filePath, cv::IMREAD_UNCHANGED);
     //图像裁剪，宽度做四字节对齐

@@ -7,6 +7,14 @@ import (
 	"bytes"
 )
 
+func TestInitEngine(t *testing.T) {
+
+	handle := initEngine()
+	
+	if handle == nil {
+		t.Errorf("initEngine features failed")
+	}
+}
 
 func TestExtract(t *testing.T) {
 	filePath := "face-test.jpg"
@@ -18,12 +26,11 @@ func TestExtract(t *testing.T) {
 	    val, _ := strconv.ParseInt(c, 10, 32)
 		featureBytes[i] = byte(val)
 	}
-
-	results := extract(filePath)
+	handle := initEngine()
+	results := extract(filePath, handle)
 
 	if ! bytes.Equal(featureBytes, results) {
 		t.Errorf("extract features failed: feature length = %d, result length = %d", len(results), len(results) )
 	}
-	
 }
 

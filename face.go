@@ -13,13 +13,18 @@ import (
 	// "log"
 	"unsafe"
 )
-
-
-func extract(filePath string) []byte{
+ 
+func initEngine() unsafe.Pointer {
 	APPID := "64p4MfjsFyVXQM21jbTmHQbCeDcv4wwgVVaQMZaAhmGD"
 	SDKKEY := "8tGcaiv4BzcG232WmGKWTa1izjsXWSLTg8CKJsGvESX4"
 
-	handle := C.initEngine(C.CString(APPID), C.CString(SDKKEY))
+	return C.initEngine(C.CString(APPID), C.CString(SDKKEY))
+}
+func extract(filePath string, handle unsafe.Pointer ) []byte{
+	// APPID := "64p4MfjsFyVXQM21jbTmHQbCeDcv4wwgVVaQMZaAhmGD"
+	// SDKKEY := "8tGcaiv4BzcG232WmGKWTa1izjsXWSLTg8CKJsGvESX4"
+
+	// handle := C.initEngine(C.CString(APPID), C.CString(SDKKEY))
 	feature := C.extract(C.CString(filePath), handle)
 	
 	if feature.featureSize > 0 {
