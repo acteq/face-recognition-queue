@@ -12,6 +12,11 @@ import (
 
 
 func main() {
+	handle := initEngine()
+	if handle == nil {
+		log.Fatal("initEngine failed")
+	}
+	
 
 	consumer, err := beanstalk.NewConsumer([]string{"localhost:11300"}, []string{"face-recognize"}, beanstalk.Config{
 		// Multiply the list of URIs to create a larger pool of connections.
@@ -45,6 +50,7 @@ func main() {
 					break
 				}
 				fmt.Printf("%s\n", m.Filepath)
+				featureBytes := extract(m.Filepath, handle)
 			}
 		
 			if err := job.Delete(ctx); err != nil {
