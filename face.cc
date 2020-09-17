@@ -7,9 +7,13 @@
 #include <stdlib.h>
 // #include <string.h>
 // #include <time.h>
-#include<opencv.hpp>
+#include "cv.hpp"
+#include "highgui.h"
+#include "cxcore.h"
+
 #include "face.h"
 
+using namespace cv;
 using namespace std;
 
 void * initEngine (const char* APPID, const char* SDKKEY) {
@@ -43,7 +47,7 @@ void * initEngine (const char* APPID, const char* SDKKEY) {
 
 
 ASF_FaceFeature extract(const char * filePath, void* handle) {
-    cv::Mat originalImg = cv::imread(filePath, cv::IMREAD_COLOR);
+    cv::Mat originalImg = cv::imread(filePath); //, cv::IMREAD_COLOR);
     // cv::Mat originalImg = cv::imread(filePath, cv::IMREAD_UNCHANGED);
     //图像裁剪，宽度做四字节对齐
     int width = originalImg.cols - originalImg.cols%4;
